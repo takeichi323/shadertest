@@ -18,6 +18,7 @@ void Stage::Initialize()
 {
     //モデルデータのロード
     hModel_ = Model::Load("assets/BoxDefault.fbx");
+
     assert(hModel_ >= 0);
 }
 
