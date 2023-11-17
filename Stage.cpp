@@ -1,6 +1,7 @@
 #include "Stage.h"
 #include "Engine/Model.h"
 #include "Controller.h"
+#include "Engine/Camera.h"
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
@@ -17,7 +18,7 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("assets/BoxDefault.fbx");
+    hModel_ = Model::Load("assets/Ball.fbx");
 
     assert(hModel_ >= 0);
 }
@@ -25,6 +26,8 @@ void Stage::Initialize()
 //更新
 void Stage::Update()
 {
+    transform_.rotate_.x += 2.0f;
+   
 
 }
 

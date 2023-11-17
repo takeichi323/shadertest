@@ -5,6 +5,7 @@
 enum SCENE_ID
 {
 	SCENE_ID_TEST = 0,
+	SCENE_ID_STAGE,
 };
 
 
