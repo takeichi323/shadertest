@@ -31,10 +31,13 @@ HRESULT Texture::Load(std::string fileName)
 	{
 		return E_FAIL;
 	}
-
-	D3D11_SAMPLER_DESC  SamDesc;
+	//サンプラーの作成
+	D3D11_SAMPLER_DESC  SamDesc;//構造体
 	ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
+
+	//フィルター
 	SamDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
 	SamDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
