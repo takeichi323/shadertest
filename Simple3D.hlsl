@@ -24,6 +24,7 @@ struct VS_OUT
 	float4 pos  : SV_POSITION;	//位置
 	float2 uv	: TEXCOORD;		//UV座標
 	float4 color	: COLOR;	//色（明るさ）
+	float eyev   :POIDC
 };
 
 //───────────────────────────────────────
@@ -57,6 +58,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
 	float4 diffuse;
 	float4 ambient;
+	
 	if (isTextured == false)
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
