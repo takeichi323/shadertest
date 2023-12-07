@@ -186,7 +186,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 {
 	pMaterialList_ = new MATERIAL[materialCount_];
 
-	for (int i = 0; i < materialCount_; i++)
+	for (DWORD i = 0; i < materialCount_; i++)
 	{
 		//i”Ô–Ú‚Ìƒ}ƒeƒŠƒAƒ‹î•ñ‚ðŽæ“¾
 		FbxSurfaceMaterial* pMaterial = pNode->GetMaterial(i);

@@ -21,7 +21,9 @@ class Fbx
 	struct MATERIAL
 	{
 		Texture* pTexture;
-		XMFLOAT4 diffuse;
+		XMFLOAT4 diffuse;//拡散反射光
+		XMFLOAT4 specular;//鏡面反射光反射（スペキュラ）強度
+		XMFLOAT4 polygonCount;//マテリアルのポリゴン数
 	};
 
 	struct CONSTANT_BUFFER
@@ -30,11 +32,14 @@ class Fbx
 		XMMATRIX	matNormal;
 		XMMATRIX    matW;//ワールド変換だけのやつ
 		XMFLOAT4	diffuseColor;//面の色
-		XMFLOAT4    lightPosition;
+		XMFLOAT4    lightPosition;//ライトのポジション（向き）
+		XMFLOAT4    speculer;//スペキュラー(Lambertの場合は)
 		XMFLOAT4    eyePos;
-		BOOL		isTextured;
+		BOOL		isTextured;//テクスチャがあるかどうか判断するやつ
 	};
 
+
+	//一つの頂点情報を格納する構造体
 	struct VERTEX
 	{
 		XMVECTOR position;//位置
