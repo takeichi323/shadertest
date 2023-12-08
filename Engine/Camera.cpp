@@ -49,7 +49,7 @@ void Camera::SetTarget(XMFLOAT3 target)
 
 XMVECTOR Camera::GetEyePosition()
 {
-	return XMVECTOR();
+	return position_;
 }
 
 //ƒrƒ…[s—ñ‚ğæ“¾

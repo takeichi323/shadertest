@@ -247,6 +247,8 @@ void Fbx::Draw(Transform& transform)
 
 
 		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);	//ÄŠJ
+		//Direct3D::pContext_->Unmap(pConstantBuffer_, 0);	//ÄŠJ
+
 
 
 
