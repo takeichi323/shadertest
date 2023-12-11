@@ -15,6 +15,12 @@ using std::vector;
 
 class Texture;
 
+enum RENDER_STATE
+{
+	RENDER_DIRLIGHT,
+	RENDER_PNTLIGHT,
+};
+
 class Fbx
 {
 	//マテリアル
@@ -22,19 +28,19 @@ class Fbx
 	{
 		Texture* pTexture;
 		XMFLOAT4 diffuse;//拡散反射光
-		XMFLOAT4 specular;//鏡面反射光反射（スペキュラ）強度
-		XMFLOAT4 polygonCount;//マテリアルのポリゴン数
+		//XMFLOAT4 specular;//鏡面反射光反射（スペキュラ）強度
+		//XMFLOAT4 polygonCount;//マテリアルのポリゴン数
 	};
 
 	struct CONSTANT_BUFFER
 	{
 		XMMATRIX	matWVP;//wvp
-		XMMATRIX	matNormal;
 		XMMATRIX    matW;//ワールド変換だけのやつ
+		XMMATRIX	matNormal;
 		XMFLOAT4	diffuseColor;//面の色
-		XMFLOAT4    lightPosition;//ライトのポジション（向き）
-		XMFLOAT4    speculer;//スペキュラー(Lambertの場合は)
-		XMFLOAT4    eyePos;
+		//XMFLOAT4    lightPosition;//ライトのポジション（向き）
+		//XMFLOAT4    speculer;//スペキュラー(Lambertの場合は)
+		//XMFLOAT4    eyePos;
 		BOOL		isTextured;//テクスチャがあるかどうか判断するやつ
 	};
 
@@ -61,10 +67,12 @@ class Fbx
 	void InitIndex(fbxsdk::FbxMesh* mesh);
 	void IntConstantBuffer();
 	void InitMaterial(fbxsdk::FbxNode* pNode);
+	RENDER_STATE state_;
 public:
 
 	Fbx();
 	HRESULT Load(std::string fileName);
 	void    Draw(Transform& transform);
+	void    SetRenderingShader(RENDER_STATE _state) { state_ = _state; }
 	void    Release();
 };

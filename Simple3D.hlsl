@@ -25,9 +25,9 @@ struct VS_OUT
 	float4 pos       :SV_POSITION;	//位置
 	float2 uv	     : TEXCOORD;		//UV座標
 	float4 color	 : COLOR;	//色（明るさ）
-	float4 eyev      :POTITION1
-	float4 normal    :POSITION2
-	float4 light     :POSITION3
+	float4 eyev      :POTITION
+	float4 normal    :NORMAL
+	/*float4 light     :POSITION3*/
 };
 
 //───────────────────────────────────────

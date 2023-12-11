@@ -5,6 +5,9 @@
 #include "Engine/Quad.h"
 #include "Engine/Input.h"
 
+namespace {
+	const XMFLOAT4 DEF_LIGHT_POSITION{ 1, 2, 1, 0 };
+}
 
 void Stage::InConstantBuffer()
 {
@@ -18,7 +21,7 @@ void Stage::InConstantBuffer()
 
 	// コンスタントバッファの作成
 	HRESULT hr;
-	hr = Direct3D::pDevice_->CreateBuffer(&cb, nullptr, &pConstantBuffer_);
+	hr = Direct3D::pDevice_->CreateBuffer(&cb, nullptr, &pCBStageScene_);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, "コンスタントバッファの作成に失敗しました", "エラー", MB_OK);
@@ -27,7 +30,7 @@ void Stage::InConstantBuffer()
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
-    :GameObject(parent, "Stage"), hModel_(-1),hGround_(-1),lightSourcePosition_(LIGHT_POSITION)
+    :GameObject(parent, "Stage"), hModel_(-1),hGround_(-1),lightSourcePosition_(DEF_LIGHT_POSITION)
 {
 }
 
@@ -58,7 +61,7 @@ void Stage::Initialize()
 	trLightBall.position_ = { 0,0,0 };
 	trLightBall.rotate_ = { 0,0,0 };
 	trLightBall.scale_ = { 0.4,0.4,0.4 };
-	Instantiate<axisClass>(this);
+	//Instantiate<axisClass>(this);
    
 	InConstantBuffer();
 }
@@ -75,7 +78,7 @@ void Stage::Update()
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x + 0.1f,p.y + 0.0f,p.y + 0.0f,p.z + 0.0f,p.w + 0.0f };
+		XMFLOAT4 margin{ p.x + 0.1f, p.y + 0.0f, p.z + 0.0f, p.w + 0.0f };
 
 		SetLightPos(margin);
 	}
@@ -83,14 +86,14 @@ void Stage::Update()
 	if (Input::IsKey(DIK_LEFT))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		XMFLOAT4 margin{ p.x - 0.1f, p.y - 0.0f, p.z - 0.0f, p.w - 0.0f };
 		SetLightPos(margin);
 	}
 
 	if (Input::IsKey(DIK_UP))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x + 0.1f,p.y + 0.0f,p.y + 0.0f,p.z + 0.0f,p.w + 0.0f };
+		XMFLOAT4 margin{ p.x - 0.1f, p.y - 0.0f, p.z - 0.0f, p.w - 0.0f };
 
 		SetLightPos(margin);
 	}
@@ -98,21 +101,21 @@ void Stage::Update()
 	if (Input::IsKey(DIK_DOWN))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		XMFLOAT4 margin{ p.x - 0.1f, p.y - 0.0f, p.z - 0.0f, p.w - 0.0f };
 		SetLightPos(margin);
 	}
 
 	if (Input::IsKey(DIK_W))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		XMFLOAT4 margin{ p.x - 0.1f, p.y - 0.0f, p.z - 0.0f, p.w - 0.0f };
 		SetLightPos(margin);
 	}
 
 	if (Input::IsKey(DIK_S))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		XMFLOAT4 margin{ p.x - 0.1f, p.y - 0.0f, p.z - 0.0f, p.w - 0.0f };
 		SetLightPos(margin);
 	}
 
@@ -123,10 +126,10 @@ void Stage::Update()
 	cb.lightPosition = lightSourcePosition_;
 	XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
 
-	Direct3D::pContext_->UpdateSubresource(pCBStageScene_, 0, NULL, &cb, );
+	Direct3D::pContext_->UpdateSubresource(pCBStageScene_, 0, NULL, &cb,0,0 );
 
-	Direct3D::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);	//頂点シェーダー用	
-	Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);	//ピクセルシェーダー用
+	Direct3D::pContext_->VSSetConstantBuffers(0, 1, &pCBStageScene_);	//頂点シェーダー用	
+	Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pCBStageScene_);	//ピクセルシェーダー用
 }
 
 //描画

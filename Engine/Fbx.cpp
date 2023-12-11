@@ -1,7 +1,10 @@
+#include<assert.h>
 #include "Fbx.h"
 #include "Camera.h"
 #include "Direct3D.h"
 #include "Texture.h"
+
+const XMFLOAT4 LIGHT_POSITION{ 1,2,1,0 };
 
 Fbx::Fbx()
 	:vertexCount_(0), polygonCount_(0), materialCount_(0),
@@ -169,7 +172,7 @@ void Fbx::IntConstantBuffer()
 	cb.ByteWidth = sizeof(CONSTANT_BUFFER);
 	cb.Usage = D3D11_USAGE_DYNAMIC;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.CPUAccessFlags = 0;
 	cb.MiscFlags = 0;
 	cb.StructureByteStride = 0;
 
@@ -219,13 +222,21 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		else
 		{
 			pMaterialList_[i].pTexture = nullptr;
+
+			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)pNode->GetMaterial(i);
+			FbxDouble3 diffuse = pMaterial->Diffuse;
+			pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 		}
 	}
 }
 
 void Fbx::Draw(Transform& transform)
 {
-	Direct3D::SetShader(SHADER_3D);
+	if (state_ == RENDER_DIRLIGHT)
+		Direct3D::SetShader(SHADER_3D);
+	else
+		Direct3D::SetShader(SHADER_POINT);
+
 	transform.Calclation();//トランスフォームを計算
 
 	for (int i = 0; i < materialCount_; i++) {
