@@ -32,7 +32,7 @@ class Fbx
 		//XMFLOAT4 polygonCount;//マテリアルのポリゴン数
 	};
 
-	struct CONSTANT_BUFFER
+	struct CBUFF_MODEL
 	{
 		XMMATRIX	matWVP;//wvp
 		XMMATRIX    matW;//ワールド変換だけのやつ
