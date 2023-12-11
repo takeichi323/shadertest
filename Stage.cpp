@@ -10,9 +10,9 @@ void Stage::InConstantBuffer()
 {
 	D3D11_BUFFER_DESC cb;
 	cb.ByteWidth = sizeof(CONSTANT_BUFFER);
-	cb.Usage = D3D11_USAGE_DYNAMIC;
+	cb.Usage = D3D11_USAGE_DEFAULT;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.CPUAccessFlags = 0;
 	cb.MiscFlags = 0;
 	cb.StructureByteStride = 0;
 
@@ -27,7 +27,7 @@ void Stage::InConstantBuffer()
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
-    :GameObject(parent, "Stage"), hModel_(-1),hGround_(-1)
+    :GameObject(parent, "Stage"), hModel_(-1),hGround_(-1),lightSourcePosition_(LIGHT_POSITION)
 {
 }
 
@@ -41,10 +41,24 @@ void Stage::Initialize()
 {
     //モデルデータのロード
     hModel_ = Model::Load("assets/Ball.fbx");
-    //hGround_ = Model::Load("assets/Ground.fbx");
+    hGround_ = Model::Load("assets/Ground.fbx");
 
     assert(hModel_ >= 0);
-   // assert(hGround_ >= 0);
+    assert(hGround_ >= 0);
+	Camera::SetPosition(XMVECTOR{ 0,10,-20,0 });
+	Camera::SetTarget(XMVECTOR{ 0,2,0,0 });
+	trDonuts_.position_ = { 0,2,0 };
+	trDonuts_.rotate_ = { 0,0,0 };
+	trDonuts_.scale_ = { 1,1,1 };
+
+	trGround.position_ = { 0,0,0 };
+	trGround.rotate_ = { 0,0,0 };
+	trGround.scale_ = { 10,10,10 };
+
+	trLightBall.position_ = { 0,0,0 };
+	trLightBall.rotate_ = { 0,0,0 };
+	trLightBall.scale_ = { 0.4,0.4,0.4 };
+	Instantiate<axisClass>(this);
    
 	InConstantBuffer();
 }
@@ -52,14 +66,55 @@ void Stage::Initialize()
 //更新
 void Stage::Update()
 {
+	if (Input::IsKey/*Up*/(DIK_SPACE))
+	{
+		Model::ToggleRenderState();
+	}
+    
+	trDonuts_.rotate_.y += 0.5f;
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		XMFLOAT4 p = GetLightPos();
+		XMFLOAT4 margin{ p.x + 0.1f,p.y + 0.0f,p.y + 0.0f,p.z + 0.0f,p.w + 0.0f };
+
+		SetLightPos(margin);
+	}
+
+	if (Input::IsKey(DIK_LEFT))
+	{
+		XMFLOAT4 p = GetLightPos();
+		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		SetLightPos(margin);
+	}
+
+	if (Input::IsKey(DIK_UP))
+	{
+		XMFLOAT4 p = GetLightPos();
+		XMFLOAT4 margin{ p.x + 0.1f,p.y + 0.0f,p.y + 0.0f,p.z + 0.0f,p.w + 0.0f };
+
+		SetLightPos(margin);
+	}
+
+	if (Input::IsKey(DIK_DOWN))
+	{
+		XMFLOAT4 p = GetLightPos();
+		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		SetLightPos(margin);
+	}
+
+	if (Input::IsKey(DIK_W))
+	{
+		XMFLOAT4 p = GetLightPos();
+		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		SetLightPos(margin);
+	}
+
 	if (Input::IsKey(DIK_S))
 	{
 		XMFLOAT4 p = GetLightPos();
-		XMFLOAT4 margin{p.x-0.0f,}
+		XMFLOAT4 margin{ p.x - 0.1f,p.y - 0.0f,p.y - 0.0f,p.z - 0.0f,p.w - 0.0f }
+		SetLightPos(margin);
 	}
-
-
-
 
 	XMFLOAT4 tmp{ GetLightPos() };
 	trLightBall.position_ = { tmp.x,tmp.y,tmp.z };
@@ -82,6 +137,9 @@ void Stage::Draw()
 
    // Model::SetTransform(hGround_, transform_);
     //Model::Draw(hGround_);
+
+	Model::SetTransform(hLightBall_, transform_);
+	Model::Draw(hLightBall_);
 }
 
 //開放
