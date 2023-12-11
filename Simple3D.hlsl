@@ -16,6 +16,11 @@ cbuffer global:register(b0)
 	float4		diffuseColor;		//マテリアルの色＝拡散反射係数
 	bool		isTextured;			//テクスチャーが貼られているかどうか
 };
+cbuffer global:register(b1)
+{
+	float4 lightPosition;
+	float4 eyePosition;
+};
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
@@ -25,8 +30,8 @@ struct VS_OUT
 	float4 pos       :SV_POSITION;	//位置
 	float2 uv	     : TEXCOORD;		//UV座標
 	float4 color	 : COLOR;	//色（明るさ）
-	float4 eyev      :POTITION
-	float4 normal    :NORMAL
+	float4 eyev      :POTITION;
+	float4 normal    :NORMAL;
 	/*float4 light     :POSITION3*/
 };
 
@@ -44,14 +49,14 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	outData.uv = uv;
 	normal.w = 0;
 	normal = mul(normal, matNormal);
-	normal = normlaize(cormal);
+	normal = normalize(normal);
 	outData.normal = normal;
 
 	float4 light = normalize(lightPosition);
 	light = normalize(light);
 
 	outData.color = saturate(dot(normal, light));
-	float4 posw = mul(pos.matW);
+	float4 posw = mul(pos,matW);
 	outData.eyev = eyePosition - posw;
 
 	//まとめて出力
@@ -69,7 +74,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambient;
 	float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
 	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPosition));
-	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev)))), 8);
+	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), 8);
 	
 	if (isTextured == 0)
 	{
