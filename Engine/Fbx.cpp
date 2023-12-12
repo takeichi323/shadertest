@@ -198,7 +198,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		FbxDouble3 ambient = pMaterial->Ambient;
 
 		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[0],1.0f };
-
+		//’Ç‰Á
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId)) {
 			FbxDouble3 speclar = pMaterial->Specular;
 			FbxDouble shiness = pMaterial->Shininess;
