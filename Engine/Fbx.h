@@ -35,12 +35,9 @@ class Fbx
 	struct CBUFF_MODEL
 	{
 		XMMATRIX	matWVP;//wvp
-		XMMATRIX    matW;//ワールド変換だけのやつ
-		XMMATRIX	matNormal;
+		XMMATRIX    matW;//wvp
+		XMMATRIX	matNormal;//ワールド変換だけのやつ
 		XMFLOAT4	diffuseColor;//面の色
-		//XMFLOAT4    lightPosition;//ライトのポジション（向き）
-		//XMFLOAT4    speculer;//スペキュラー(Lambertの場合は)
-		//XMFLOAT4    eyePos;
 		BOOL		isTextured;//テクスチャがあるかどうか判断するやつ
 	};
 
