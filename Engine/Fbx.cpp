@@ -192,16 +192,23 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 	for (DWORD i = 0; i < materialCount_; i++)
 	{
 		//i番目のマテリアル情報を取得
-		FbxSurfacePhong* pMaterial = (FbxSurfacePhong*)(pNode->GetMaterial(i));
+		FbxSurfaceMaterial* pMaterial = pNode->GetMaterial(i);
+		FbxSurfacePhong* pPhong = (FbxSurfacePhong*)pMaterial;
 		
-		FbxDouble3 diffuse = pMaterial->Diffuse;
-		FbxDouble3 ambient = pMaterial->Ambient;
+		FbxDouble3 diffuse = pPhong->Diffuse;
+		FbxDouble3 ambient = pPhong->Ambient;
+		
 
-		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[0],1.0f };
-		//追加
+		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		pMaterialList_[i].ambient = XMFLOAT4{ (float)ambient[0],(float)ambient[1],(float)ambient[2],1.0f };
+		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0);
+		//Mayaでフォンシェーダーだったら
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId)) {
-			FbxDouble3 speclar = pMaterial->Specular;
-			FbxDouble shiness = pMaterial->Shininess;
+			FbxDouble3 specular = pPhong->Specular;
+			pMaterialList_[i].specular = XMFLOAT4{ (float)specular[0],(float)specular[1],(float)specular[2],1.0f };
+           
+			//FbxDouble3 shininess = pPhong->shininess;
+			pMaterialList_[i].shininess = 1;
 		}
 
 		
@@ -256,7 +263,10 @@ void Fbx::Draw(Transform& transform)
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
-		cb.diffuseColor = pMaterialList_[i].diffuse;
+		/*cb.diffuseColor = pMaterialList_[i].diffuse;
+		cb.ambientColor = pMaterialList_[i].ambient;
+		cb.specularColor = pMaterialList_[i].specular;*/
+
 		//cb.lightPosition = lightSoucePosition_;
 		//XMStoreFloat4(&cb.eyePos.Camera::GetEyePosition());
 

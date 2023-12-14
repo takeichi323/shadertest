@@ -28,7 +28,10 @@ class Fbx
 	{
 		Texture* pTexture;
 		XMFLOAT4 diffuse;//拡散反射光
-		//XMFLOAT4 specular;//鏡面反射光反射（スペキュラ）強度
+		XMFLOAT4 ambient;
+		XMFLOAT4 specular;//鏡面反射光反射（スペキュラ）強度
+		float      shininess;
+
 		//XMFLOAT4 polygonCount;//マテリアルのポリゴン数
 	};
 
@@ -37,8 +40,11 @@ class Fbx
 		XMMATRIX	matWVP;//wvp
 		XMMATRIX    matW;//wvp
 		XMMATRIX	matNormal;//ワールド変換だけのやつ
-		XMFLOAT4	diffuseColor;//面の色
+		XMMATRIX   diffuseColor;
+		XMMATRIX   ambientColor;
+		XMMATRIX    specularColor;
 		BOOL		isTextured;//テクスチャがあるかどうか判断するやつ
+		
 	};
 
 

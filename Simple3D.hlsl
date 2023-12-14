@@ -14,6 +14,9 @@ cbuffer global:register(b0)
 	float4x4	matW;                 //ワールド行列
 	float4x4	matNormal;           // ワールド行列
 	float4		diffuseColor;		//マテリアルの色＝拡散反射係数
+	float4      ambientColor;
+	float4      specularColor;
+	float      shininess;
 	bool		isTextured;			//テクスチャーが貼られているかどうか
 };
 cbuffer global:register(b1)
@@ -69,7 +72,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 float4 PS(VS_OUT inData) : SV_Target
 {
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);  //ライト色＆明るさ　Iin
-	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);//アンビエント係数　　Ka
+	float4 ambentSource = ambientColor;//アンビエント係数　　Ka
 	float4 diffuse;
 	float4 ambient;
 	float4 NL = /*saturate*/(dot(inData.normal, normalize(lightPosition)));//法線とライトの内積
@@ -92,5 +95,5 @@ float4 PS(VS_OUT inData) : SV_Target
 	/*return diffuse + ambient ;
 	float4 output = g_texture.Sample(g_sampler, inData.uv);
 	return output;*/
-	return specular;
+	return diffuse + ambient + specular;
 }
