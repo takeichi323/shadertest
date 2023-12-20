@@ -170,7 +170,7 @@ void Fbx::IntConstantBuffer()
 {
 	D3D11_BUFFER_DESC cb;
 	cb.ByteWidth = sizeof(CBUFF_MODEL);
-	cb.Usage = D3D11_USAGE_DYNAMIC;
+	cb.Usage = D3D11_USAGE_DEFAULT;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cb.CPUAccessFlags = 0;
 	cb.MiscFlags = 0;
@@ -199,9 +199,9 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		FbxDouble3 ambient = pPhong->Ambient;
 		
 
-		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		/*pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
 		pMaterialList_[i].ambient = XMFLOAT4{ (float)ambient[0],(float)ambient[1],(float)ambient[2],1.0f };
-		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0);
+		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0);*/
 		//Mayaでフォンシェーダーだったら
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId)) {
 			FbxDouble3 specular = pPhong->Specular;
