@@ -5,6 +5,7 @@
 #include "Engine/Quad.h"
 #include "Engine/Input.h"
 
+
 namespace {
 	const XMFLOAT4 DEF_LIGHT_POSITION{ 1, 2, 1, 0 };
 }
@@ -43,11 +44,13 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("assets/Ball.fbx");
+    hModel_ = Model::Load("assets/Ball5.fbx");
     hGround_ = Model::Load("assets/Ground.fbx");
+	hLightBall_ = Model::Load("assets/Ball.fbx");
 
     assert(hModel_ >= 0);
     assert(hGround_ >= 0);
+	assert(hLightBall_ >= 0);
 	Camera::SetPosition(XMVECTOR{ 0,10,-20,0 });
 	Camera::SetTarget(XMVECTOR{ 0,2,0,0 });
 	trDonuts_.position_ = { 0,2,0 };
@@ -62,6 +65,8 @@ void Stage::Initialize()
 	trLightBall.rotate_ = { 0,0,0 };
 	trLightBall.scale_ = { 0.4,0.4,0.4 };
 	//Instantiate<axisClass>(this);
+	//Instantiate<Arrow>(this);
+	
    
 	InConstantBuffer();
 }
@@ -69,12 +74,12 @@ void Stage::Initialize()
 //更新
 void Stage::Update()
 {
-	if (Input::IsKey/*Up*/(DIK_SPACE))
+	if (Input::IsKeyUp(DIK_SPACE))
 	{
 		Model::ToggleRenderState();
 	}
     
-	trDonuts_.rotate_.y += 0.5f;
+	//trDonuts_.rotate_.y += 0.5f;
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		XMFLOAT4 p = GetLightPos();

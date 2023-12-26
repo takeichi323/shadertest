@@ -42,6 +42,16 @@ namespace Input
 		return false;
 	}
 
+	bool IsKeyUp(int keyCode)
+	{
+		//¡‚Í‰Ÿ‚µ‚Ä‚È‚­‚ÄA‘O‰ñ‚Í‰Ÿ‚µ‚Ä‚é
+		if (!IsKey(keyCode) && prevKeyState[keyCode] & 0x80)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void Release()
 	{
 		SAFE_RELEASE(pDInput);
